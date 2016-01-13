@@ -1,0 +1,11 @@
+syntax = "proto2";
+package iircCommon;
+
+
+enum DataType {
+    Login = 0;
+    LoginResult = 1;
+    ChannelList = 2;
+    BacklogNotification = 3;
+    ChatMessage = 4;
+}

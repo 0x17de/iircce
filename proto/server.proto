@@ -1,0 +1,53 @@
+syntax = "proto2";
+package iircServer;
+
+
+message LoginResult {
+    required bool success = 1;
+}
+
+message ConnectionsList {
+    message Server {
+        required uint64 serverId = 1;
+
+        message Channel {
+            required uint64 id = 1;
+            required string name = 2;
+            required uint64 lastReadId = 3;
+        }
+
+        repeated Channel channels = 2;
+    }
+    repeated Server servers = 1;
+}
+
+message ChannelList {
+	required uint64 serverId = 1;
+
+	message Channel {
+		required uint64 id = 1;
+		required string name = 2;
+		required uint64 lastReadId = 3;
+	}
+
+	repeated Channel channels = 2;
+}
+
+message BacklogNotification {
+	required uint64 serverId = 1;
+
+	message ChannelBacklog {
+		required uint64 channelId = 1;
+
+		message Backlog {
+			required uint64 messageId = 1;
+			required uint64 timestamp = 2;
+			required string nick = 3;
+			required string message = 4;
+		}
+
+		repeated Backlog backlog = 2;
+	}
+
+	repeated ChannelBacklog channelBacklog = 2;
+}

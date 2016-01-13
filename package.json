@@ -1,0 +1,29 @@
+{
+  "name": "iircc",
+  "version": "0.0.1",
+  "description": "",
+  "author": "Manuel Herrmann <m@manuel-herrmann.de>",
+  "contributors": [],
+  "scripts": {
+    "start": "electron main.js",
+    "prepublish": ""
+  },
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/..."
+  },
+  "bugs": {
+    "url": ""
+  },
+  "keywords": [],
+  "dependencies": {
+    "tls": "^0.0.1"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "^0.36.0"
+  },
+  "preferGlobal": true,
+  "private": true,
+  "license": ""
+}

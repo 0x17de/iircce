@@ -1,0 +1,80 @@
+body {
+	background-color: #dcdad5; /* grey */
+}
+body, div {
+	font-family: arial;
+}
+.page {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+.page:first-child {
+	border: 1em solid transparent;
+}
+
+.table {
+	width: 100%;
+	display: table;
+}
+.table-row {
+	display: table-row;
+	width: 100%;
+}
+.table-column {
+	display: table-column;
+}
+.table-cell {
+	display: table-cell;
+}
+.channelbox, .chatarea, .usersbox, .chatbox, #chatinput {
+	display: table-cell;
+}
+
+#chatlog .table-row .table-cell {
+	padding: 0.4em 0.3em;
+	vertical-align: top;
+}
+
+#chatlog .table-row {
+	background-color: #ddd;
+}
+#chatlog .table-row:nth-child(2n+1) {
+	background-color: #eee;
+}
+#chatlog .table-row .table-cell:last-child {
+	width:100%;
+}
+
+.channelbox {
+	width:14em;
+	height:100vh;
+	box-sizing: border-box;
+	border:1px solid;
+}
+.usersbox {
+	width:10em;
+	height:100vh;
+	box-sizing: border-box;
+	border:1px solid;
+}
+.chatarea {
+	height:100vh;
+	box-sizing: border-box;
+}
+.chatbox {
+	height: 100%;
+	border:1px inset;
+	box-sizing: border-box;
+}
+#chatinput {
+	width: 100%;
+	height:20pt;
+	border:1px solid;
+	padding: 0 0.3em;
+	box-sizing: border-box;
+}

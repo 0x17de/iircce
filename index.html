@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="style.css"/>
+	<script>window.$ = window.jQuery = require('./ext/jquery-2.2.0.min.js');</script>
+	<script src="index.js"></script>
+	<script src="input.js"></script>
+</head>
+<body>
+	<div x-page="login">
+		<div style="margin: 0 auto;width: 20em">
+			<form onsubmit="login(this); return false;">
+				<table class="login-form" cellspacing=5>
+					<tr>
+						<td>Host</td>
+						<td><input name="host" value="localhost" /></td>
+					</tr>
+					<tr>
+						<td>Port</td>
+						<td><input name="port" value="12667" /></td>
+					</tr>
+					<tr>
+						<td>Username</td>
+						<td><input name="username" value="it" /></td>
+					</tr>
+					</tr>
+					<tr>
+						<td>Password</td>
+						<td><input name="password" value="it" /></td>
+					</tr>
+					<tr>
+						<td>Use SSL</td>
+						<td><input name="ssl" type="checkbox" /></td><!-- TODO: convert to 'force only ssl' later and always checked -->
+					</tr>
+					<tr>
+						<td></td>
+						<td style="text-align:right"><input type="submit" value="Login" /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+	<div x-page="chat">
+		<div class="table" style="height:100vh">
+			<div class="table-row">
+				<div class="channelbox">
+					
+				</div>
+				<div class="chatarea">
+					<div class="table" style="height:100%">
+						<div class="table-row" style="height:100%">
+							<div class="chatbox">
+								<div class="table" id="chatlog">
+								</div>
+							</div>
+						</div>
+						<div class="table-row" style="height:20pt">
+							<input id="chatinput"/>
+						</div>
+					</div>
+				</div>
+				<div class="usersbox">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<div x-page="settings">
+	</div>
+</body>
+</html>
