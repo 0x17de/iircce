@@ -13,17 +13,11 @@ var loginButton; // assigned on 'login()'
 var channelTabs = {};
 
 var iirc = {
+	common: pb.loadProtoFile("./proto/common.proto").build('iircCommon'),
 	server: pb.loadProtoFile("./proto/server.proto").build('iircServer'),
 	client: pb.loadProtoFile("./proto/client.proto").build('iircClient'),
 };
-
-var DataType = {
-    Login: 0,
-    LoginResult: 1,
-    ChannelList: 2,
-    BacklogNotification: 3,
-    ChatMessage: 4
-};
+var DataType = iirc.common.DataType;
 
 
 // UTILS
