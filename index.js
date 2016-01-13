@@ -50,25 +50,62 @@ $(function() {
 
 // STATES
 
+
+var networkList = {
+	items: {},
+	clearConnections: function() {
+		$('#connectionslist').children('div').remove();
+	},
+	addServer: function(nick) {
+		var s = $('#connectionslist')
+			.append($('<div/>').text(nick));
+		return s;
+	},
+	addChannel: function(server, serverid, nick) {
+		var c = server
+			.append($('<div/>').text(nick));
+		
+		return c;
+	}
+};
 function ChannelTab(serverId, channelId) {
 	console.log(serverId, channelId);
 	this.serverId = serverId;
 	this.channelId = channelId;
-	this.view = $('<div/>');
-	$('#chatlog').append(this.view);
 
+	this.chatView = $('<div class="table"/>');
+	this.nickView = $('<div/>');
+
+	$('#chatlog').append(this.chatView);
+	$('#userlist').append(this.nickView);
+
+	this.hide = function() {
+		this.chatView.hide();
+		this.nickView.hide();
+	}
+	this.show = function() {
+		this.chatView.show();
+		this.nickView.show();
+	}
 	this.activate = function() {
 		if (ChannelTab.current)
-			ChannelTab.current.view.hide();
+			ChannelTab.current.hide();
 		ChannelTab.current = this;
-		this.view.show();
+		this.show();
 	}
 	this.addMessage = function(nick, text) {
-		this.view
+		this.chatView
 			.append($('<div class="table-row"/>')
 				.append($('<div class="table-cell"/>').text(nick))
 				.append($('<div class="table-cell"/>').text(text))
 			);
+	}
+	this.clearUserList = function() {
+		this.nickView.children('div').remove();
+	}
+	this.addUser = function(nick) {
+		this.nickView
+			.append($('<div/>').text(nick));
 	}
 	this.sendMessage = function(message) {
 		var chatMessage = new iirc.client.ChatMessage(this.serverId, this.channelId, message);
@@ -107,6 +144,26 @@ function onMessage(type, buffer) {
 			var tab = ChannelTab.get(backlogNotification.serverId, channel.channelId);
 			channel.backlog.forEach(function(backlog) {
 				tab.addMessage(backlog.nick, backlog.message);
+			});
+		});
+	}
+	else if (type == DataType.UserList) {
+		var userList = iirc.server.UserList.decode(buffer);
+		console.log(JSON.stringify(userList));
+		var tab = ChannelTab.get(channel.serverId, channel.channelId);
+		tab.clearUserList();
+		userList.users.forEach(function(user) {
+			tab.addUser(user.nick);
+		});
+	}
+	else if (type == DataType.ConnectionsList) {
+		var connectionsList = iirc.server.ConnectionsList.decode(buffer);
+		console.log(JSON.stringify(connectionsList));
+		networkList.clearConnections();
+		connectionsList.servers.forEach(function(server) {
+			var serverDiv = networkList.addServer(server.name);
+			server.channels.forEach(function(channel) {
+				var channelDiv = networkList.addChannel(serverDiv, channel.name);
 			});
 		});
 	}
