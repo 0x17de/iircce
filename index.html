@@ -9,7 +9,7 @@
 <body>
 	<div x-page="login">
 		<div style="margin: 0 auto;width: 20em">
-			<form onsubmit="login(this); return false;">
+			<form id="login-form" onsubmit="login(); return false;">
 				<table class="login-form" cellspacing=5>
 					<tr>
 						<td>Host</td>
@@ -44,11 +44,9 @@
 		<div class="table" style="height:100vh">
 			<div class="table-row">
 				<div class="channelbox">
-					<div class="connectionslist-ymargin"></div>
 					<div id="connectionslist">
 						
 					</div>
-					<div class="connectionslist-ymargin"></div>
 				</div>
 				<div class="chatarea">
 					<div class="table" style="height:100vh">
@@ -61,8 +59,10 @@
 						</div>
 					</div>
 				</div>
-				<div class="usersbox" id="userlist">
-					
+				<div class="usersbox">
+					<div id="userlist">
+
+					</div>
 				</div>
 				<div style="clear:both"></div>
 			</div>

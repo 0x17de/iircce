@@ -61,8 +61,19 @@ body {
 	width:100%;
 }
 
-#connectionslist {
-	margin: 1em;
+#connectionslist > div {
+	padding: 0.2em 0.4em;
+	background-color: #d8d8d8;
+}
+#connectionslist > div:nth-child(2n+1) {
+	background-color: #eee;
+}
+#userlist > div > div {
+	padding: 0.2em 0.4em;
+	background-color: #d8d8d8;
+}
+#userlist > div > div:nth-child(2n+1) {
+	background-color: #eee;
 }
 
 .channelbox {

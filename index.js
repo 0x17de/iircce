@@ -33,6 +33,8 @@ function showPage(name) {
 	var newPage = pages[name];
 	newPage.show();
 	pages.current = newPage;
+	if (name == 'chat')
+		$('#chatinput').focus();
 }
 
 
@@ -61,9 +63,12 @@ var networkList = {
 			.append($('<div/>').text(nick));
 		return s;
 	},
-	addChannel: function(server, serverid, nick) {
+	addChannel: function(server, serverId, channelId, channelName) {
 		var c = server
-			.append($('<div/>').text(nick));
+			.append($('<div/>').text(channelName));
+
+		if (!ChannelTab.current)
+			ChannelTab.get(serverId, channelId);
 		
 		return c;
 	}
@@ -150,7 +155,7 @@ function onMessage(type, buffer) {
 	else if (type == DataType.UserList) {
 		var userList = iirc.server.UserList.decode(buffer);
 		console.log(JSON.stringify(userList));
-		var tab = ChannelTab.get(channel.serverId, channel.channelId);
+		var tab = ChannelTab.get(userList.serverId, userList.channelId);
 		tab.clearUserList();
 		userList.users.forEach(function(user) {
 			tab.addUser(user.nick);
@@ -163,9 +168,17 @@ function onMessage(type, buffer) {
 		connectionsList.servers.forEach(function(server) {
 			var serverDiv = networkList.addServer(server.name);
 			server.channels.forEach(function(channel) {
-				var channelDiv = networkList.addChannel(serverDiv, channel.name);
+				var channelDiv = networkList.addChannel(serverDiv, server.id, channel.id, channel.name);
 			});
 		});
+	}
+	else {
+		for (var i in iirc.common.DataType) {
+			if (iirc.common.DataType[i] == type) {
+				console.log("Unhandled Message: "+i);
+				break;
+			}
+		}
 	}
 }
 
@@ -187,18 +200,18 @@ function connect() {
 	client.on('data', (data) => {
 		var buffer = data;
 		while (buffer.length > 0) {
-			console.log(JSON.stringify(buffer));
+			var e = buffer;
 			
 			var type = buffer.readUInt16LE(0);
 			var size = {
 				low: buffer.readUInt32LE(2),
 				high: buffer.readUInt32LE(6)
 			};
-			console.log(JSON.stringify({type:type, size:size}));
 
 			buffer = buffer.slice(2+8);
-			onMessage(type, buffer);
+			onMessage(type, buffer.slice(0, size.low));
 			buffer = buffer.slice(size.low);
+
 		}
 	});
 	client.on('end', () => {
@@ -209,9 +222,13 @@ function connect() {
 	});
 }
 
-function login(form) {
+function login() {
+	var jform = $('#login-form');
+	var form = jform.get(0);
 	if (!loginButton)
-		loginButton = $(form).find('input[type=submit]');
+		loginButton = jform.find('input[type=submit]');
+
+
 	loginButton.prop('disabled', true);
 	userdata.login = {
 		host: form.host.value,
