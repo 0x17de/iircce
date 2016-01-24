@@ -57,7 +57,6 @@ $(function() {
 // STATES
 
 function ChannelTab(serverId, channelId) {
-	console.log(serverId, channelId);
 	this.serverId = serverId;
 	this.channelId = channelId;
 
@@ -121,13 +120,11 @@ ChannelTab.get = function(serverId, channelId) {
 function onMessage(type, buffer) {
 	if (type == DataType.LoginResult) {
 		var loginResult = iirc.server.LoginResult.decode(buffer);
-		console.log(JSON.stringify(loginResult));
 		if (loginResult.success)
 			showPage('chat');
 	}
 	else if (type == DataType.BacklogNotification) {
 		var backlogNotification = iirc.server.BacklogNotification.decode(buffer);
-		console.log(JSON.stringify(backlogNotification));
 		backlogNotification.channelBacklog.forEach(function(channel) {
 			var tab = ChannelTab.get(backlogNotification.serverId, channel.channelId);
 			channel.backlog.forEach(function(backlog) {
@@ -137,7 +134,6 @@ function onMessage(type, buffer) {
 	}
 	else if (type == DataType.UserList) {
 		var userList = iirc.server.UserList.decode(buffer);
-		console.log(JSON.stringify(userList));
 		var tab = ChannelTab.get(userList.serverId, userList.channelId);
 		tab.clearUserList();
 		userList.users.forEach(function(user) {
@@ -146,7 +142,6 @@ function onMessage(type, buffer) {
 	}
 	else if (type == DataType.ConnectionsList) {
 		var connectionsList = iirc.server.ConnectionsList.decode(buffer);
-		console.log(JSON.stringify(connectionsList));
 		networkList.clear();
 		var root = networkList.root;
 		connectionsList.servers.forEach(function(server) {
@@ -161,7 +156,7 @@ function onMessage(type, buffer) {
 	else {
 		for (var i in iirc.common.DataType) {
 			if (iirc.common.DataType[i] == type) {
-				console.log("Unhandled Message: "+i);
+				console.warning("Unhandled Message: "+i);
 				break;
 			}
 		}
@@ -173,10 +168,6 @@ function connect() {
 
 	var useSsl = userdata.login.useSsl;
 	var connector = useSsl ? tls : net;
-
-	console.log (useSsl);
-	console.log (connector == net);
-	console.log (connector == tls);
 
 	client = connector.connect({
 		host: userdata.login.host,
