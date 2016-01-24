@@ -10,6 +10,8 @@ var client;
 var clientState = 'disconnected';
 var loginButton; // assigned on 'login()'
 
+var networkList = new TreeView();
+
 var channelTabs = {};
 
 var iirc = {
@@ -41,6 +43,8 @@ function showPage(name) {
 // INIT
 
 $(function() {
+	$('#connectionslist').append(networkList.get());
+
 	w = $(window);
 	$('div[x-page]').addClass('page').each(function() {
 		var name = $(this).attr('x-page');
@@ -52,27 +56,6 @@ $(function() {
 
 // STATES
 
-
-var networkList = {
-	items: {},
-	clearConnections: function() {
-		$('#connectionslist').children('div').remove();
-	},
-	addServer: function(nick) {
-		var s = $('#connectionslist')
-			.append($('<div/>').text(nick));
-		return s;
-	},
-	addChannel: function(server, serverId, channelId, channelName) {
-		var c = server
-			.append($('<div/>').text(channelName));
-
-		if (!ChannelTab.current)
-			ChannelTab.get(serverId, channelId);
-		
-		return c;
-	}
-};
 function ChannelTab(serverId, channelId) {
 	console.log(serverId, channelId);
 	this.serverId = serverId;
@@ -164,11 +147,14 @@ function onMessage(type, buffer) {
 	else if (type == DataType.ConnectionsList) {
 		var connectionsList = iirc.server.ConnectionsList.decode(buffer);
 		console.log(JSON.stringify(connectionsList));
-		networkList.clearConnections();
+		networkList.clear();
+		var root = networkList.root;
 		connectionsList.servers.forEach(function(server) {
-			var serverDiv = networkList.addServer(server.name);
+			var serverRoot = root.add(new TreeItem(server.id, server.name, function() { }));
 			server.channels.forEach(function(channel) {
-				var channelDiv = networkList.addChannel(serverDiv, server.id, channel.id, channel.name);
+				if (!ChannelTab.current)
+					ChannelTab.get(server.id, channel.id);
+				var channelRoot = serverRoot.add(new TreeItem(server.id+":"+channel.id, channel.name, function() { ChannelTab.get(server.id, channel.id); }));
 			});
 		});
 	}
