@@ -48,6 +48,12 @@ body {
 }
 #connectionslist > div > div div {
 	padding-left: 1em;
+	cursor: pointer;
+	-moz-user-select     : none;
+	-khtml-user-select   : none;
+	-webkit-user-select  : none;
+	-o-user-select       : none;
+	user-select: none;
 }
 #connectionslist > div > div div:first-child {
 	padding-left: 0;

@@ -149,7 +149,7 @@ function onMessage(type, buffer) {
 			server.channels.forEach(function(channel) {
 				if (!ChannelTab.current)
 					ChannelTab.get(server.id, channel.id);
-				var channelRoot = serverRoot.add(new TreeItem(server.id+":"+channel.id, channel.name, function() { ChannelTab.get(server.id, channel.id); }));
+				var channelRoot = serverRoot.add(new TreeItem(server.id+":"+channel.id, channel.name, function() { ChannelTab.get(server.id, channel.id).activate(); }));
 			});
 		});
 	}
